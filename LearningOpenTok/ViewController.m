@@ -9,8 +9,9 @@
 #import <OpenTok/OpenTok.h>
 
 @interface ViewController ()
-<OTSessionDelegate, OTPublisherDelegate>
+<OTSessionDelegate, OTSubscriberKitDelegate, OTPublisherDelegate>
 @property (weak, nonatomic) IBOutlet UIView *videoContainerView;
+@property (weak, nonatomic) IBOutlet UIView *subscriberView;
 @property (weak, nonatomic) IBOutlet UIView *publisherView;
 
 @end
@@ -18,6 +19,7 @@
 @implementation ViewController {
     OTSession* _session;
     OTPublisher* _publisher;
+    OTSubscriber* _subscriber;
     NSString* _archiveId;
     NSString* _apiKey;
     NSString* _sessionId;
@@ -118,6 +120,25 @@
     _publisher = nil;
 }
 
+- (void)doSubscribe:(OTStream*)stream
+{
+    _subscriber = [[OTSubscriber alloc] initWithStream:stream
+                                              delegate:self];
+    OTError *error = nil;
+    [_session subscribe:_subscriber error:&error];
+    if (error)
+    {
+        NSLog(@"Unable to publish (%@)",
+              error.localizedDescription);
+    }
+}
+
+- (void)cleanupSubscriber
+{
+    [_subscriber.view removeFromSuperview];
+    _subscriber = nil;
+}
+
 # pragma mark - OTSession delegate callbacks
 
 - (void)sessionDidConnect:(OTSession*)session
@@ -137,12 +158,22 @@
 streamCreated:(OTStream *)stream
 {
     NSLog(@"session streamCreated (%@)", stream.streamId);
+    
+    if (nil == _subscriber)
+    {
+        [self doSubscribe:stream];
+    }
 }
 
 - (void)session:(OTSession*)session
 streamDestroyed:(OTStream *)stream
 {
     NSLog(@"session streamDestroyed (%@)", stream.streamId);
+    
+    if ([_subscriber.stream.streamId isEqualToString:stream.streamId])
+    {
+        [self cleanupSubscriber];
+    }
 }
 
 - (void)  session:(OTSession *)session
@@ -182,6 +213,25 @@ didFailWithError:(OTError*) error
 {
     NSLog(@"publisher didFailWithError %@", error);
     [self cleanupPublisher];
+}
+
+# pragma mark - OTSubscriber delegate callbacks
+
+- (void)subscriberDidConnectToStream:(OTSubscriberKit*)subscriber
+{
+    NSLog(@"subscriberDidConnectToStream (%@)",
+          subscriber.stream.connection.connectionId);
+    [_subscriber.view setFrame:CGRectMake(0, 0, _subscriberView.bounds.size.width,
+                                          _subscriberView.bounds.size.height)];
+    [_subscriberView addSubview:_subscriber.view];
+}
+
+- (void)subscriber:(OTSubscriberKit*)subscriber
+  didFailWithError:(OTError*)error
+{
+    NSLog(@"subscriber %@ didFailWithError %@",
+          subscriber.stream.streamId,
+          error);
 }
 
 @end

@@ -17,6 +17,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="infinite" translatesAutoresizingMaskIntoConstraints="NO" id="YM2-i5-qwZ" userLabel="Subscriber Container">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VNU-0U-P9j" userLabel="Publisher Container">
                                 <rect key="frame" x="10" y="500" width="120" height="90"/>
                                 <constraints>
@@ -27,12 +30,17 @@
                             </containerView>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="YM2-i5-qwZ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="7kd-ny-a0i"/>
                             <constraint firstItem="VNU-0U-P9j" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="10" id="Kf8-Bf-qDD"/>
+                            <constraint firstItem="YM2-i5-qwZ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="NqX-eL-Ona"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="VNU-0U-P9j" secondAttribute="bottom" constant="10" id="QJg-ZE-4e2"/>
+                            <constraint firstAttribute="bottom" secondItem="YM2-i5-qwZ" secondAttribute="bottom" id="V8Q-0P-yrN"/>
+                            <constraint firstAttribute="trailing" secondItem="YM2-i5-qwZ" secondAttribute="trailing" id="jnF-8I-e5X"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="publisherView" destination="VNU-0U-P9j" id="MAz-DJ-pJI"/>
+                        <outlet property="subscriberView" destination="YM2-i5-qwZ" id="dsw-lc-zre"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

@@ -9,12 +9,16 @@
 #import <OpenTok/OpenTok.h>
 
 @interface ViewController ()
-<OTSessionDelegate>
+<OTSessionDelegate, OTPublisherDelegate>
+@property (weak, nonatomic) IBOutlet UIView *videoContainerView;
+@property (weak, nonatomic) IBOutlet UIView *publisherView;
 
 @end
 
 @implementation ViewController {
     OTSession* _session;
+    OTPublisher* _publisher;
+    NSString* _archiveId;
     NSString* _apiKey;
     NSString* _sessionId;
     NSString* _token;
@@ -84,16 +88,41 @@
     [_session connectWithToken:_token error:&error];
     if (error)
     {
-        NSLog(@"Unable to connect to the session (%@)",
+        NSLog(@"Unable to connect to session (%@)",
               error.localizedDescription);
     }
+}
+
+- (void)doPublish
+{
+    _publisher = [[OTPublisher alloc]
+                  initWithDelegate:self];
+    
+    OTError *error = nil;
+    [_session publish:_publisher error:&error];
+    if (error)
+    {
+        NSLog(@"Unable to publish (%@)",
+              error.localizedDescription);
+    }
+    
+    [_publisher.view setFrame:CGRectMake(0, 0, _publisherView.bounds.size.width,
+                                         _publisherView.bounds.size.height)];
+    [_publisherView addSubview:_publisher.view];
+
+}
+
+
+- (void)cleanupPublisher {
+    [_publisher.view removeFromSuperview];
+    _publisher = nil;
 }
 
 # pragma mark - OTSession delegate callbacks
 
 - (void)sessionDidConnect:(OTSession*)session
 {
-    NSLog(@"Connected to the session.");
+    [self doPublish];
 }
 
 - (void)sessionDidDisconnect:(OTSession*)session
@@ -131,7 +160,28 @@ connectionDestroyed:(OTConnection *)connection
 - (void) session:(OTSession*)session
 didFailWithError:(OTError*)error
 {
-    NSLog(@"session didFailWithError: (%@)", error);
+    NSLog(@"didFailWithError: (%@)", error);
+}
+
+# pragma mark - OTPublisher delegate callbacks
+
+- (void)publisher:(OTPublisherKit *)publisher
+streamCreated:(OTStream *)stream
+{
+    NSLog(@"Now publishing.");
+}
+
+- (void)publisher:(OTPublisherKit*)publisher
+streamDestroyed:(OTStream *)stream
+{
+    [self cleanupPublisher];
+}
+
+- (void)publisher:(OTPublisherKit*)publisher
+didFailWithError:(OTError*) error
+{
+    NSLog(@"publisher didFailWithError %@", error);
+    [self cleanupPublisher];
 }
 
 @end

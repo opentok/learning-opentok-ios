@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -15,11 +16,28 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VNU-0U-P9j" userLabel="Publisher Container">
+                                <rect key="frame" x="10" y="500" width="120" height="90"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="90" id="1Rn-K7-f2t"/>
+                                    <constraint firstAttribute="width" secondItem="VNU-0U-P9j" secondAttribute="height" multiplier="4:3" id="Z6m-YP-bNq"/>
+                                    <constraint firstAttribute="width" constant="120" id="vX1-aE-mLu"/>
+                                </constraints>
+                            </containerView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="VNU-0U-P9j" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="10" id="Kf8-Bf-qDD"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="VNU-0U-P9j" secondAttribute="bottom" constant="10" id="QJg-ZE-4e2"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="publisherView" destination="VNU-0U-P9j" id="MAz-DJ-pJI"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="138" y="116"/>
         </scene>
     </scenes>
 </document>

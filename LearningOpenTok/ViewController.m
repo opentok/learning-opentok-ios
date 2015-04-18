@@ -9,10 +9,14 @@
 #import <OpenTok/OpenTok.h>
 
 @interface ViewController ()
-<OTSessionDelegate, OTSubscriberKitDelegate, OTPublisherDelegate>
+<OTSessionDelegate, OTSubscriberKitDelegate, OTPublisherDelegate, UITextViewDelegate, UIScrollViewDelegate>
+@property (weak, nonatomic) IBOutlet UIView *controlsView;
 @property (weak, nonatomic) IBOutlet UIView *videoContainerView;
 @property (weak, nonatomic) IBOutlet UIView *subscriberView;
 @property (weak, nonatomic) IBOutlet UIView *publisherView;
+@property (weak, nonatomic) IBOutlet UIButton *swapCameraBtn;
+@property (weak, nonatomic) IBOutlet UIButton *publisherAudioBtn;
+@property (weak, nonatomic) IBOutlet UIButton *subscriberAudioBtn;
 
 @end
 
@@ -112,8 +116,51 @@
                                          _publisherView.bounds.size.height)];
     [_publisherView addSubview:_publisher.view];
 
+    
+    _publisherAudioBtn.hidden = NO;
+    [_publisherAudioBtn addTarget:self
+                          action:@selector(togglePublisherMic)
+                forControlEvents:UIControlEventTouchUpInside];
+    
+    _swapCameraBtn.hidden = NO;
+    [_swapCameraBtn addTarget:self
+               action:@selector(swapCamera)
+     forControlEvents:UIControlEventTouchUpInside];
 }
 
+
+-(void)togglePublisherMic
+{
+    _publisher.publishAudio = !_publisher.publishAudio;
+    UIImage *buttonImage;
+    if (_publisher.publishAudio) {
+        buttonImage = [UIImage imageNamed: @"mic-24.png"];
+    } else {
+        buttonImage = [UIImage imageNamed: @"mic_muted-24.png"];
+    }
+    [_publisherAudioBtn setImage:buttonImage forState:UIControlStateNormal];
+}
+
+-(void)toggleSubscriberAudio
+{
+    _subscriber.subscribeToAudio = !_subscriber.subscribeToAudio;
+    UIImage *buttonImage;
+    if (_subscriber.subscribeToAudio) {
+        buttonImage = [UIImage imageNamed: @"Subscriber-Speaker-35.png"];
+    } else {
+        buttonImage = [UIImage imageNamed: @"Subscriber-Speaker-Mute-35.png"];
+    }
+    [_subscriberAudioBtn setImage:buttonImage forState:UIControlStateNormal];
+}
+
+-(void)swapCamera
+{
+    if (_publisher.cameraPosition == AVCaptureDevicePositionFront) {
+        _publisher.cameraPosition = AVCaptureDevicePositionBack;
+    } else {
+        _publisher.cameraPosition = AVCaptureDevicePositionFront;
+    }
+}
 
 - (void)cleanupPublisher {
     [_publisher.view removeFromSuperview];
@@ -224,6 +271,12 @@ didFailWithError:(OTError*) error
     [_subscriber.view setFrame:CGRectMake(0, 0, _subscriberView.bounds.size.width,
                                           _subscriberView.bounds.size.height)];
     [_subscriberView addSubview:_subscriber.view];
+    
+    _subscriberAudioBtn.hidden = NO;
+    [_subscriberAudioBtn addTarget:self
+                           action:@selector(toggleSubscriberAudio)
+                 forControlEvents:UIControlEventTouchUpInside];
+
 }
 
 - (void)subscriber:(OTSubscriberKit*)subscriber

@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 TokBox, Inc. All rights reserved.
 
 #import "ViewController.h"
+#import "OTKBasicAudioDevice.h"
 #import <OpenTok/OpenTok.h>
 
 @interface ViewController ()
@@ -90,6 +91,8 @@
     _session = [[OTSession alloc] initWithApiKey:_apiKey
                                        sessionId:_sessionId
                                         delegate:self];
+    
+    [OTAudioDeviceManager setAudioDevice:[[OTKBasicAudioDevice alloc] init]];
     OTError *error = nil;
     [_session connectWithToken:_token error:&error];
     if (error)
@@ -104,6 +107,8 @@
     _publisher = [[OTPublisher alloc]
                   initWithDelegate:self];
     
+    [_publisher setPublishVideo:NO];
+    
     OTError *error = nil;
     [_session publish:_publisher error:&error];
     if (error)
@@ -112,20 +117,10 @@
               error.localizedDescription);
     }
     
-    [_publisher.view setFrame:CGRectMake(0, 0, _publisherView.bounds.size.width,
-                                         _publisherView.bounds.size.height)];
-    [_publisherView addSubview:_publisher.view];
-
-    
     _publisherAudioBtn.hidden = NO;
     [_publisherAudioBtn addTarget:self
                           action:@selector(togglePublisherMic)
                 forControlEvents:UIControlEventTouchUpInside];
-    
-    _swapCameraBtn.hidden = NO;
-    [_swapCameraBtn addTarget:self
-               action:@selector(swapCamera)
-     forControlEvents:UIControlEventTouchUpInside];
 }
 
 
@@ -153,14 +148,6 @@
     [_subscriberAudioBtn setImage:buttonImage forState:UIControlStateNormal];
 }
 
--(void)swapCamera
-{
-    if (_publisher.cameraPosition == AVCaptureDevicePositionFront) {
-        _publisher.cameraPosition = AVCaptureDevicePositionBack;
-    } else {
-        _publisher.cameraPosition = AVCaptureDevicePositionFront;
-    }
-}
 
 - (void)cleanupPublisher {
     [_publisher.view removeFromSuperview];

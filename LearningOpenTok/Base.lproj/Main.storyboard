@@ -49,6 +49,16 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="archiving_on-10.png" translatesAutoresizingMaskIntoConstraints="NO" id="wME-Qk-BRs" userLabel="Archiving Indicator Img">
+                                <rect key="frame" x="10" y="10" width="10" height="10"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x7S-eq-mJi" userLabel="Archive Control Button">
+                                <rect key="frame" x="30" y="0.0" width="108" height="30"/>
+                                <state key="normal" title="Start Recording">
+                                    <color key="titleColor" red="1" green="0.86088040789999998" blue="0.1764404899" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sAV-RL-4d9" userLabel="Publisher Audio Button">
                                 <rect key="frame" x="91" y="561" width="24" height="24"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -56,6 +66,7 @@
                             </button>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="x7S-eq-mJi" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="46X-Kb-tue"/>
                             <constraint firstItem="S4Y-or-Dng" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="2" id="5V9-KD-6VC"/>
                             <constraint firstItem="sAV-RL-4d9" firstAttribute="leading" secondItem="S4Y-or-Dng" secondAttribute="trailing" constant="40" id="6s4-jA-Lad"/>
                             <constraint firstItem="YM2-i5-qwZ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="7kd-ny-a0i"/>
@@ -67,10 +78,15 @@
                             <constraint firstAttribute="bottom" secondItem="YM2-i5-qwZ" secondAttribute="bottom" id="V8Q-0P-yrN"/>
                             <constraint firstAttribute="trailing" secondItem="hpr-UX-Ad0" secondAttribute="trailing" constant="10" id="dUz-Fm-AT0"/>
                             <constraint firstAttribute="trailing" secondItem="YM2-i5-qwZ" secondAttribute="trailing" id="jnF-8I-e5X"/>
+                            <constraint firstItem="wME-Qk-BRs" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="10" id="nkG-UZ-K8t"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="hpr-UX-Ad0" secondAttribute="bottom" constant="10" id="noz-Qu-itD"/>
+                            <constraint firstItem="x7S-eq-mJi" firstAttribute="leading" secondItem="wME-Qk-BRs" secondAttribute="trailing" constant="10" id="or4-Wp-afi"/>
+                            <constraint firstItem="wME-Qk-BRs" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="10" id="pDW-4C-N5J"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="archiveControlBtn" destination="x7S-eq-mJi" id="fVP-Yg-eo5"/>
+                        <outlet property="archiveIndicatorImg" destination="wME-Qk-BRs" id="HbK-vN-v1H"/>
                         <outlet property="publisherAudioBtn" destination="sAV-RL-4d9" id="kXS-ju-VZt"/>
                         <outlet property="publisherView" destination="VNU-0U-P9j" id="MAz-DJ-pJI"/>
                         <outlet property="subscriberAudioBtn" destination="hpr-UX-Ad0" id="6GE-L4-zCE"/>
@@ -85,6 +101,7 @@
     </scenes>
     <resources>
         <image name="Subscriber-Speaker-35.png" width="35" height="35"/>
+        <image name="archiving_on-10.png" width="10" height="10"/>
         <image name="camera-switch_black-33.png" width="33" height="33"/>
         <image name="mic-24.png" width="24" height="24"/>
     </resources>

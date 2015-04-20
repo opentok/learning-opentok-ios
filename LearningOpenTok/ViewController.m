@@ -17,6 +17,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *swapCameraBtn;
 @property (weak, nonatomic) IBOutlet UIButton *publisherAudioBtn;
 @property (weak, nonatomic) IBOutlet UIButton *subscriberAudioBtn;
+@property (weak, nonatomic) IBOutlet UIImageView *archiveIndicatorImg;
+@property (weak, nonatomic) IBOutlet UIButton *archiveControlBtn;
 
 @end
 
@@ -126,8 +128,14 @@
     [_swapCameraBtn addTarget:self
                action:@selector(swapCamera)
      forControlEvents:UIControlEventTouchUpInside];
-}
 
+    if (SAMPLE_SERVER_BASE_URL) {
+        _archiveControlBtn.hidden = NO;
+        [_archiveControlBtn addTarget:self
+                               action:@selector(startArchive)
+                     forControlEvents:UIControlEventTouchUpInside];
+    }
+}
 
 -(void)togglePublisherMic
 {
@@ -186,6 +194,57 @@
     _subscriber = nil;
 }
 
+-(void)startArchive
+{
+    _archiveControlBtn.hidden = YES;
+    NSString *fullURL = SAMPLE_SERVER_BASE_URL;
+    fullURL = [fullURL stringByAppendingString:@"/start/"];
+    fullURL = [fullURL stringByAppendingString:_sessionId];
+    NSURL *url = [NSURL URLWithString: fullURL];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:10];
+    [request setHTTPMethod: @"POST"];
+    
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
+        if (error){
+            NSLog(@"Error starting the archive: %@. URL : %@",
+                  [error localizedDescription],
+                  fullURL);
+        }
+        else{
+            NSLog(@"Web service call to start the archive: %@", fullURL);
+        }
+    }];
+}
+
+-(void)stopArchive
+{
+    _archiveControlBtn.hidden = YES;
+    NSString *fullURL = SAMPLE_SERVER_BASE_URL;
+    fullURL = [fullURL stringByAppendingString:@"/stop/"];
+    fullURL = [fullURL stringByAppendingString:_archiveId];
+    NSURL *url = [NSURL URLWithString: fullURL];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:10];
+    [request setHTTPMethod: @"POST"];
+    
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
+        if (error){
+            NSLog(@"Error stopping the archive: %@. URL : %@",
+                  [error localizedDescription],fullURL);
+        }
+        else{
+            NSLog(@"Web service call to stop the archive: %@", fullURL);
+        }
+    }];
+}
+
+-(void)loadArchivePlaybackInBrowser
+{
+    NSString *fullURL = SAMPLE_SERVER_BASE_URL;
+    fullURL = [fullURL stringByAppendingString:@"/view/"];
+    fullURL = [fullURL stringByAppendingString:_archiveId];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:fullURL]];
+}
+
 # pragma mark - OTSession delegate callbacks
 
 - (void)sessionDidConnect:(OTSession*)session
@@ -240,6 +299,38 @@ didFailWithError:(OTError*)error
 {
     NSLog(@"didFailWithError: (%@)", error);
 }
+
+- (void)     session:(OTSession*)session
+archiveStartedWithId:(NSString *)archiveId
+                name:(NSString *)name
+{
+    NSLog(@"session archiving started with id:%@ name:%@", archiveId, name);
+    _archiveId = archiveId;
+    _archiveIndicatorImg.hidden = NO;
+    if (SAMPLE_SERVER_BASE_URL) {
+        _archiveControlBtn.hidden = NO;
+        [_archiveControlBtn setTitle: @"Stop recording" forState:UIControlStateNormal];
+        _archiveControlBtn.hidden = NO;
+        [_archiveControlBtn addTarget:self
+                               action:@selector(stopArchive)
+                     forControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
+- (void)     session:(OTSession*)session
+archiveStoppedWithId:(NSString *)archiveId
+{
+    NSLog(@"session archiving stopped with id:%@", archiveId);
+    _archiveIndicatorImg.hidden = YES;
+    if (SAMPLE_SERVER_BASE_URL) {
+        _archiveControlBtn.hidden = NO;
+        [_archiveControlBtn setTitle: @"View recording" forState:UIControlStateNormal];
+        [_archiveControlBtn addTarget:self
+                               action:@selector(loadArchivePlaybackInBrowser)
+                     forControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
 
 # pragma mark - OTPublisher delegate callbacks
 

@@ -7,6 +7,7 @@
 
 #import "ViewController.h"
 #import <OpenTok/OpenTok.h>
+#import "OTKBasicVideoRender.h"
 
 @interface ViewController ()
 <OTSessionDelegate, OTSubscriberKitDelegate, OTPublisherDelegate, UITextViewDelegate, UIScrollViewDelegate>
@@ -24,6 +25,7 @@
     OTSession* _session;
     OTPublisher* _publisher;
     OTSubscriber* _subscriber;
+    OTKBasicVideoRender *_renderer;
     NSString* _archiveId;
     NSString* _apiKey;
     NSString* _sessionId;
@@ -103,6 +105,9 @@
 {
     _publisher = [[OTPublisher alloc]
                   initWithDelegate:self];
+    _renderer = [[OTKBasicVideoRender alloc] init];
+    
+    _publisher.videoRender = _renderer;
     
     OTError *error = nil;
     [_session publish:_publisher error:&error];
@@ -112,10 +117,9 @@
               error.localizedDescription);
     }
     
-    [_publisher.view setFrame:CGRectMake(0, 0, _publisherView.bounds.size.width,
-                                         _publisherView.bounds.size.height)];
-    [_publisherView addSubview:_publisher.view];
-
+    [_renderer.renderView setFrame:CGRectMake(0, 0, _publisherView.bounds.size.width,
+                                              _publisherView.bounds.size.height)];
+    [_publisherView addSubview:_renderer.renderView];
     
     _publisherAudioBtn.hidden = NO;
     [_publisherAudioBtn addTarget:self

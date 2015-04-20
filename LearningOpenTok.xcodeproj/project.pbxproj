@@ -36,6 +36,8 @@
 		1FB7CCF81AE1F850001F0D1A /* Subscriber-Speaker-35@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB7CCF01AE1F850001F0D1A /* Subscriber-Speaker-35@2x.png */; };
 		1FB7CCF91AE1F850001F0D1A /* Subscriber-Speaker-Mute-35.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB7CCF11AE1F850001F0D1A /* Subscriber-Speaker-Mute-35.png */; };
 		1FB7CCFA1AE1F850001F0D1A /* Subscriber-Speaker-Mute-35@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB7CCF21AE1F850001F0D1A /* Subscriber-Speaker-Mute-35@2x.png */; };
+		1FB7CD041AE5B6DB001F0D1A /* OTKBasicVideoRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB7CD011AE5B6DB001F0D1A /* OTKBasicVideoRender.m */; };
+		1FB7CD051AE5B6DB001F0D1A /* OTKCustomRenderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB7CD031AE5B6DB001F0D1A /* OTKCustomRenderView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +75,10 @@
 		1FB7CCF01AE1F850001F0D1A /* Subscriber-Speaker-35@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Subscriber-Speaker-35@2x.png"; sourceTree = "<group>"; };
 		1FB7CCF11AE1F850001F0D1A /* Subscriber-Speaker-Mute-35.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Subscriber-Speaker-Mute-35.png"; sourceTree = "<group>"; };
 		1FB7CCF21AE1F850001F0D1A /* Subscriber-Speaker-Mute-35@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Subscriber-Speaker-Mute-35@2x.png"; sourceTree = "<group>"; };
+		1FB7CD001AE5B6DB001F0D1A /* OTKBasicVideoRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTKBasicVideoRender.h; sourceTree = "<group>"; };
+		1FB7CD011AE5B6DB001F0D1A /* OTKBasicVideoRender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTKBasicVideoRender.m; sourceTree = "<group>"; };
+		1FB7CD021AE5B6DB001F0D1A /* OTKCustomRenderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTKCustomRenderView.h; sourceTree = "<group>"; };
+		1FB7CD031AE5B6DB001F0D1A /* OTKCustomRenderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTKCustomRenderView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +152,10 @@
 				1F3FEE671AE19ECA002E2CF8 /* AppDelegate.h */,
 				1F3FEE681AE19ECA002E2CF8 /* AppDelegate.m */,
 				1F3FEE891AE1A233002E2CF8 /* Config.h */,
+				1FB7CD001AE5B6DB001F0D1A /* OTKBasicVideoRender.h */,
+				1FB7CD011AE5B6DB001F0D1A /* OTKBasicVideoRender.m */,
+				1FB7CD021AE5B6DB001F0D1A /* OTKCustomRenderView.h */,
+				1FB7CD031AE5B6DB001F0D1A /* OTKCustomRenderView.m */,
 				1F3FEE6A1AE19ECA002E2CF8 /* ViewController.h */,
 				1F3FEE6B1AE19ECA002E2CF8 /* ViewController.m */,
 				1F3FEE6D1AE19ECA002E2CF8 /* Main.storyboard */,
@@ -253,7 +263,9 @@
 			files = (
 				1F3FEE6C1AE19ECA002E2CF8 /* ViewController.m in Sources */,
 				1F3FEE691AE19ECA002E2CF8 /* AppDelegate.m in Sources */,
+				1FB7CD051AE5B6DB001F0D1A /* OTKCustomRenderView.m in Sources */,
 				1F3FEE661AE19ECA002E2CF8 /* main.m in Sources */,
+				1FB7CD041AE5B6DB001F0D1A /* OTKBasicVideoRender.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

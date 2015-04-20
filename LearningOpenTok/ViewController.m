@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 TokBox, Inc. All rights reserved.
 
 #import "ViewController.h"
+#import "OTKBasicVideoCapturer.h"
 #import <OpenTok/OpenTok.h>
 
 @interface ViewController ()
@@ -126,6 +127,8 @@
     [_swapCameraBtn addTarget:self
                action:@selector(swapCamera)
      forControlEvents:UIControlEventTouchUpInside];
+
+    _publisher.videoCapture = [[OTKBasicVideoCapturer alloc] init];
 }
 
 

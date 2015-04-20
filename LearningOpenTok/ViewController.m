@@ -9,14 +9,16 @@
 #import <OpenTok/OpenTok.h>
 
 @interface ViewController ()
-<OTSessionDelegate, OTSubscriberKitDelegate, OTPublisherDelegate, UITextViewDelegate, UIScrollViewDelegate>
+<OTSessionDelegate, OTSubscriberKitDelegate, OTPublisherDelegate, UITextFieldDelegate, UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UIView *controlsView;
 @property (weak, nonatomic) IBOutlet UIView *videoContainerView;
 @property (weak, nonatomic) IBOutlet UIView *subscriberView;
 @property (weak, nonatomic) IBOutlet UIView *publisherView;
 @property (weak, nonatomic) IBOutlet UIButton *swapCameraBtn;
+@property (weak, nonatomic) IBOutlet UITextView *chatReceivedTextView;
 @property (weak, nonatomic) IBOutlet UIButton *publisherAudioBtn;
 @property (weak, nonatomic) IBOutlet UIButton *subscriberAudioBtn;
+@property (weak, nonatomic) IBOutlet UITextField *chatInputTextField;
 
 @end
 
@@ -35,6 +37,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    _chatInputTextField.delegate = self;
+
     [self getSessionCredentials];
 }
 
@@ -186,6 +191,32 @@
     _subscriber = nil;
 }
 
+- (void) sendChatMessage
+{
+    OTError* error = nil;
+    [_session signalWithType:@"chat" string:_chatInputTextField.text connection:nil error:&error];
+    if (error) {
+        NSLog(@"Signal error: %@", error);
+    } else {
+        NSLog(@"Signal sent: %@", _chatInputTextField.text);
+    }
+    _chatInputTextField.text = @"";
+}
+
+- (void)logSignalString:(NSString*)string fromSelf:(Boolean)fromSelf {
+    int prevLength = _chatReceivedTextView.text.length - 1;
+    [_chatReceivedTextView insertText:string];
+    [_chatReceivedTextView insertText:@"\n"];
+    
+    if (fromSelf) {
+        NSDictionary* formatDict = @{NSForegroundColorAttributeName: [UIColor blueColor]};
+        NSRange textRange = NSMakeRange(prevLength + 1, string.length);
+        [_chatReceivedTextView.textStorage setAttributes:formatDict range:textRange];
+    }
+    [_chatReceivedTextView setContentOffset:_chatReceivedTextView.contentOffset animated:NO];
+    [_chatReceivedTextView scrollRangeToVisible:NSMakeRange([_chatReceivedTextView.text length], 0)];
+}
+
 # pragma mark - OTSession delegate callbacks
 
 - (void)sessionDidConnect:(OTSession*)session
@@ -255,6 +286,15 @@ streamDestroyed:(OTStream *)stream
     [self cleanupPublisher];
 }
 
+- (void)session:(OTSession*)session receivedSignalType:(NSString*)type fromConnection:(OTConnection*)connection withString:(NSString*)string {
+    NSLog(@"Received signal %@", string);
+    Boolean fromSelf = NO;
+    if ([connection.connectionId isEqualToString:session.connection.connectionId]) {
+        fromSelf = YES;
+    }
+    [self logSignalString:string fromSelf:fromSelf];
+}
+
 - (void)publisher:(OTPublisherKit*)publisher
 didFailWithError:(OTError*) error
 {
@@ -285,6 +325,20 @@ didFailWithError:(OTError*) error
     NSLog(@"subscriber %@ didFailWithError %@",
           subscriber.stream.streamId,
           error);
+}
+
+# pragma mark - UITextFieldDelegate callbacks
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    _chatInputTextField.text = @"";
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self sendChatMessage];
+    [self.view endEditing:YES];
+    return YES;
 }
 
 @end

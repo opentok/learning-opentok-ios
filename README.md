@@ -14,7 +14,6 @@ chat session. Additionally, the app uses the OpenTok iOS SDK to implement the fo
 * A simple custom video capturer
 * A custom video capturer that uses the device camera
 * Publishing a screen-sharing stream
-* A video capturer that lets you obtain still screen captures of the camera used by a publisher
 
 The code for this sample is found the following git branches:
 
@@ -47,9 +46,6 @@ The code for this sample is found the following git branches:
 
 * *screen-sharing* - This branch shows you how to use the device's screen (instead of a
   camera) as the video source for a published stream.
-
-* *screen-capture* -  This branch shows you how to take a screen capture (still image)
-  of the publisher's video.
 
 You will also need to clone the OpenTok PHP Getting Started repo and run its code on a
 PHP-enabled web server. See the basics.step-2 section for more information.
@@ -1386,39 +1382,6 @@ The `screenshot` method takes a screenshot and returns an image. This method is 
         UIGraphicsEndImageContext();
         return image;
     }
-
-
-# Screen capture (screen-capture branch)
-
-To see the code for this sample, switch to the screen-capture branch.
-
-Before studying this sample, see the video-capturer-camera sample.
-
-This sample code demonstrates how to use the OpenTok iOS SDK to capture a still image from the
-camera used by the publisher.
-
-When the user taps the button to take a screenshot of the publisher, the app calls the
-`[OTKBasicVideoCapturer takePhotoWithCompletionHandler`] method:
-
-    - (void)takePhotoWithCompletionHandler:(photoCaptureBlock)block
-    {
-        if (self.isTakingPhoto) {
-            return;
-        }
-        self.isTakingPhoto = YES;
-        dispatch_async(self.captureQueue, ^() {
-            NSString* oldPreset = [self pauseVideoCaptureForPhoto];
-            UIImage* result = [self doPhotoCapture];
-            dispatch_async(dispatch_get_main_queue(), ^() {
-                block(result);
-            });
-            [self resumeVideoCapture:oldPreset];
-            self.isTakingPhoto = NO;
-        });
-    }
-
-This method calls the `doPhotoCapture` method uses AVCaptureStillImageOutput to capture
-a still image from the camera and return a UIImage representation.
 
 
 # Other resources

@@ -1101,10 +1101,9 @@ the best frame rate for image capture:
                                                        height:self.imageHeight];
     }
 
-The `bestFrameRateForDevice:(AVCaptureDeviceInput *)inputDevice:` method returns the best frame rate
-for the capturing device:
+The `[self bestFrameRateForDevice]` method returns the best frame rate for the capturing device:
 
-    - (double)bestFrameRateForDevice:(AVCaptureDeviceInput *)inputDevice
+    - (double)bestFrameRateForDevice
     {
         double bestFrameRate = 0;
         for (AVFrameRateRange* range in

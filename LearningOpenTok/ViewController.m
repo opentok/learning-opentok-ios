@@ -128,7 +128,8 @@
                action:@selector(swapCamera)
      forControlEvents:UIControlEventTouchUpInside];
 
-    _publisher.videoCapture = [[OTKBasicVideoCapturer alloc] init];
+    _publisher.videoCapture = [[OTKBasicVideoCapturer alloc] initWithPreset:AVCaptureSessionPreset352x288
+                                                        andDesiredFrameRate:30];
 }
 
 

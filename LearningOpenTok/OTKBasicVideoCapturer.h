@@ -11,4 +11,5 @@
 
 @interface OTKBasicVideoCapturer : NSObject<OTVideoCapture>
 
+- (id)initWithPreset:(NSString *)preset andDesiredFrameRate:(NSUInteger)frameRate;
 @end

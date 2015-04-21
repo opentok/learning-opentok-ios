@@ -3,7 +3,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -18,9 +17,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="infinite" translatesAutoresizingMaskIntoConstraints="NO" id="YM2-i5-qwZ" userLabel="Subscriber Container">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                            </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VNU-0U-P9j" userLabel="Publisher Container">
                                 <rect key="frame" x="10" y="500" width="120" height="90"/>
                                 <constraints>
@@ -29,16 +25,6 @@
                                     <constraint firstAttribute="width" constant="120" id="vX1-aE-mLu"/>
                                 </constraints>
                             </containerView>
-                            <button hidden="YES" opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S4Y-or-Dng" userLabel="Swap Camera Button">
-                                <rect key="frame" x="18" y="556" width="33" height="34"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="34" id="NXB-WY-kvM"/>
-                                    <constraint firstAttribute="width" constant="33" id="WG2-nv-apo"/>
-                                </constraints>
-                                <state key="normal" backgroundImage="camera-switch_black-33.png">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hpr-UX-Ad0" userLabel="Subscriber Audio Button">
                                 <rect key="frame" x="566" y="565" width="24" height="25"/>
                                 <constraints>
@@ -49,24 +35,32 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sAV-RL-4d9" userLabel="Publisher Audio Button">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sAV-RL-4d9" userLabel="Publisher Audio Button">
                                 <rect key="frame" x="91" y="561" width="24" height="24"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" backgroundImage="mic-24.png"/>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bhb-Er-ddD">
+                                <rect key="frame" x="116" y="274" width="183" height="30"/>
+                                <state key="normal" title="This is being screenshared">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uCg-9Q-pZ4">
+                                <rect key="frame" x="130" y="158" width="66" height="108"/>
+                                <color key="backgroundColor" red="0.62397411616161613" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hjd-n8-4It">
+                                <rect key="frame" x="222" y="158" width="66" height="108"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
+                        <color key="backgroundColor" red="0.77272727272727271" green="0.77272727272727271" blue="0.77272727272727271" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="S4Y-or-Dng" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="2" id="5V9-KD-6VC"/>
-                            <constraint firstItem="sAV-RL-4d9" firstAttribute="leading" secondItem="S4Y-or-Dng" secondAttribute="trailing" constant="40" id="6s4-jA-Lad"/>
-                            <constraint firstItem="YM2-i5-qwZ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="7kd-ny-a0i"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="S4Y-or-Dng" secondAttribute="bottom" constant="10" id="GLE-El-kW2"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="sAV-RL-4d9" secondAttribute="bottom" constant="15" id="GaM-FZ-a6I"/>
                             <constraint firstItem="VNU-0U-P9j" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="10" id="Kf8-Bf-qDD"/>
-                            <constraint firstItem="YM2-i5-qwZ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="NqX-eL-Ona"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="VNU-0U-P9j" secondAttribute="bottom" constant="10" id="QJg-ZE-4e2"/>
-                            <constraint firstAttribute="bottom" secondItem="YM2-i5-qwZ" secondAttribute="bottom" id="V8Q-0P-yrN"/>
                             <constraint firstAttribute="trailing" secondItem="hpr-UX-Ad0" secondAttribute="trailing" constant="10" id="dUz-Fm-AT0"/>
-                            <constraint firstAttribute="trailing" secondItem="YM2-i5-qwZ" secondAttribute="trailing" id="jnF-8I-e5X"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="hpr-UX-Ad0" secondAttribute="bottom" constant="10" id="noz-Qu-itD"/>
                         </constraints>
                     </view>
@@ -74,8 +68,6 @@
                         <outlet property="publisherAudioBtn" destination="sAV-RL-4d9" id="kXS-ju-VZt"/>
                         <outlet property="publisherView" destination="VNU-0U-P9j" id="MAz-DJ-pJI"/>
                         <outlet property="subscriberAudioBtn" destination="hpr-UX-Ad0" id="6GE-L4-zCE"/>
-                        <outlet property="subscriberView" destination="YM2-i5-qwZ" id="dsw-lc-zre"/>
-                        <outlet property="swapCameraBtn" destination="S4Y-or-Dng" id="9R2-Si-55f"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -85,7 +77,6 @@
     </scenes>
     <resources>
         <image name="Subscriber-Speaker-35.png" width="35" height="35"/>
-        <image name="camera-switch_black-33.png" width="33" height="33"/>
         <image name="mic-24.png" width="24" height="24"/>
     </resources>
 </document>

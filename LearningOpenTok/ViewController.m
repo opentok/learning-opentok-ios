@@ -15,7 +15,6 @@
 @property (weak, nonatomic) IBOutlet UIView *videoContainerView;
 @property (weak, nonatomic) IBOutlet UIView *subscriberView;
 @property (weak, nonatomic) IBOutlet UIView *publisherView;
-@property (weak, nonatomic) IBOutlet UIButton *swapCameraBtn;
 @property (weak, nonatomic) IBOutlet UIButton *publisherAudioBtn;
 @property (weak, nonatomic) IBOutlet UIButton *subscriberAudioBtn;
 
@@ -123,11 +122,6 @@
                           action:@selector(togglePublisherMic)
                 forControlEvents:UIControlEventTouchUpInside];
     
-    _swapCameraBtn.hidden = NO;
-    [_swapCameraBtn addTarget:self
-               action:@selector(swapCamera)
-     forControlEvents:UIControlEventTouchUpInside];
-
     _publisher.videoCapture = [[OTKBasicVideoCapturer alloc] init];
 }
 
@@ -154,15 +148,6 @@
         buttonImage = [UIImage imageNamed: @"Subscriber-Speaker-Mute-35.png"];
     }
     [_subscriberAudioBtn setImage:buttonImage forState:UIControlStateNormal];
-}
-
--(void)swapCamera
-{
-    if (_publisher.cameraPosition == AVCaptureDevicePositionFront) {
-        _publisher.cameraPosition = AVCaptureDevicePositionBack;
-    } else {
-        _publisher.cameraPosition = AVCaptureDevicePositionFront;
-    }
 }
 
 - (void)cleanupPublisher {

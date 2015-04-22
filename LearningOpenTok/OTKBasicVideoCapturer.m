@@ -15,7 +15,6 @@
 @interface OTKBasicVideoCapturer ()
 @property (nonatomic, assign) BOOL captureStarted;
 @property (nonatomic, strong) OTVideoFormat *format;
-@property (nonatomic, strong) id<OTVideoCaptureConsumer> consumer;
 - (void)produceFrame;
 - (UIImage *)screenshot;
 - (void)fillPixelBufferFromCGImage:(CGImageRef)image;
@@ -24,6 +23,8 @@
 @implementation OTKBasicVideoCapturer {
     CVPixelBufferRef pixelBuffer;
 }
+
+@synthesize videoCaptureConsumer;
 
 - (void)initCapture
 {
@@ -66,22 +67,16 @@
     return 0;
 }
 
-- (void)setVideoCaptureConsumer:(id<OTVideoCaptureConsumer>)videoCaptureConsumer
-{
-    // Save consumer instance in order to use it to send frames to the session
-    self.consumer = videoCaptureConsumer;
-}
-
 - (void)produceFrame
 {
     OTVideoFrame *frame = [[OTVideoFrame alloc] initWithFormat:self.format];
     
     static mach_timebase_info_data_t time_info;
-    uint64_t time_stamp = 0;
-    
-    time_stamp = mach_absolute_time();
-    time_stamp *= time_info.numer;
-    time_stamp /= time_info.denom;
+    uint64_t time_stamp = mach_absolute_time();
+    if (time_info.denom != 0) {
+        time_stamp *= time_info.numer;
+        time_stamp /= time_info.denom;
+    }
     
     CGImageRef screenshot = [[self screenshot] CGImage];
     [self fillPixelBufferFromCGImage:screenshot];
@@ -102,7 +97,7 @@
     planes[0] = CVPixelBufferGetBaseAddress(pixelBuffer);
     [frame setPlanesWithPointers:planes numPlanes:1];
     
-    [self.consumer consumeFrame:frame];
+    [self.videoCaptureConsumer consumeFrame:frame];
     
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
     

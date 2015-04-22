@@ -15,11 +15,12 @@
 @interface OTKBasicVideoCapturer ()
 @property (nonatomic, assign) BOOL captureStarted;
 @property (nonatomic, strong) OTVideoFormat *format;
-@property (nonatomic, strong) id<OTVideoCaptureConsumer> consumer;
 - (void)produceFrame;
 @end
 
 @implementation OTKBasicVideoCapturer
+
+@synthesize videoCaptureConsumer;
 
 - (void)initCapture
 {
@@ -63,12 +64,6 @@
     return 0;
 }
 
-- (void)setVideoCaptureConsumer:(id<OTVideoCaptureConsumer>)videoCaptureConsumer
-{
-    // Save consumer instance in order to use it to send frames to the session
-    self.consumer = videoCaptureConsumer;
-}
-
 - (void)produceFrame
 {
     OTVideoFrame *frame = [[OTVideoFrame alloc] initWithFormat:self.format];
@@ -84,7 +79,7 @@
     }
    
     [frame setPlanesWithPointers:imageData numPlanes:1];
-    [self.consumer consumeFrame:frame];
+    [self.videoCaptureConsumer consumeFrame:frame];
     
     free(imageData[0]);
     

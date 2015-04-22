@@ -1017,6 +1017,9 @@ sets up the publisher. The `captureOutput` method creates a frame, captures a sc
 frame with a timestamp and saves it in an instance of consumer. The publisher accesses the consumer
 to obtain the video frame.
 
+Note that because this sample needs to access the device's camera, you must test it on an iOS
+device. You cannot test it in the iOS simulator.
+
 ## Initializing and configuring the video capturer
 
 The `[OTKBasicVideoCapturer initWithPreset: andDesiredFrameRate:]` method is an initializer for

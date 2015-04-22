@@ -12,7 +12,6 @@
 @interface OTKBasicVideoCapturer ()<AVCaptureVideoDataOutputSampleBufferDelegate>
 @property (nonatomic, assign) BOOL captureStarted;
 @property (nonatomic, strong) OTVideoFormat *format;
-@property (nonatomic, strong) id<OTVideoCaptureConsumer> consumer;
 @property (nonatomic, strong) AVCaptureSession *captureSession;
 @property (nonatomic, strong) AVCaptureDeviceInput *inputDevice;
 @property (nonatomic, strong) NSString *sessionPreset;
@@ -22,11 +21,11 @@
 @property (nonatomic, strong) dispatch_queue_t captureQueue;
 
 - (CGSize)sizeFromAVCapturePreset:(NSString *)capturePreset;
-- (OTVideoOrientation)otVideoOrientation;
 - (double)bestFrameRateForDevice;
 @end
 
 @implementation OTKBasicVideoCapturer
+@synthesize videoCaptureConsumer;
 
 - (id)initWithPreset:(NSString *)preset andDesiredFrameRate:(NSUInteger)frameRate
 {
@@ -117,12 +116,6 @@
     return 0;
 }
 
-- (void)setVideoCaptureConsumer:(id<OTVideoCaptureConsumer>)videoCaptureConsumer
-{
-    // Save consumer instance in order to use it to send frames to the session
-    self.consumer = videoCaptureConsumer;
-}
-
 #pragma mark - AVCaptureVideoDataOutputSampleBufferDelegate
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput
@@ -169,7 +162,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     frame.timestamp = time;
     [frame setPlanesWithPointers:planes numPlanes:planeCount];
     
-    [self.consumer consumeFrame:frame];
+    [self.videoCaptureConsumer consumeFrame:frame];
     
     free(buffer);
     CVPixelBufferUnlockBaseAddress(imageBuffer, 0);

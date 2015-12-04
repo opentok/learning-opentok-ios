@@ -17,7 +17,7 @@ chat session. Additionally, the app uses the OpenTok iOS SDK to implement the fo
 
 The code for this sample is found the following git branches:
 
-* *basics.step-1* -- This branch shows you how to set up your project to use the OpenTok Android SDK.
+* *basics.step-1* -- This branch shows you how to set up your project to use the OpenTok iOS SDK.
 
 * *basics.step-4* -- This branch shows you how to connect to the OpenTok session.
 
@@ -47,7 +47,7 @@ The code for this sample is found the following git branches:
 * *screen-sharing* - This branch shows you how to use the device's screen (instead of a
   camera) as the video source for a published stream.
 
-You will also need to clone the OpenTok PHP Getting Started repo and run its code on a
+You will also need to clone the learning-opentok-php repo and run its code on a
 PHP-enabled web server. See the basics.step-2 section for more information.
 
 ## basics.step-1: Starting Point
@@ -58,8 +58,7 @@ OpenTok-related API calls.
 
 1. Download the [OpenTok iOS SDK] [1].
 
-2. Locate the Getting-Started.xcodeproj file in the Getting Started directory of the
-   learning-opentok-ios repo. Open that file in Xcode.
+2. Locate the LearningOpenTok.xcodeproj file and open it in Xcode.
 
 3. Include the OpenTok.framework in the list of frameworks used by the app.
    From the OpenTok iOS SDK, you can drag the OpenTok.framework file into the list of
@@ -81,15 +80,15 @@ OpenTok-related API calls. The web service securely creates an OpenTok session.
 The [Learning OpenTok PHP](https://github.com/opentok/learning-opentok-php) repo includes code
 for setting up a web service that handles the following API calls:
 
-* "/service" -- The Android client calls this endpoint to get an OpenTok session ID, token,
+* "/service" -- The iOS client calls this endpoint to get an OpenTok session ID, token,
   and API key.
 
-* "/start" -- The Android client calls this endpoint to start recording the OpenTok session to
+* "/start" -- The iOS client calls this endpoint to start recording the OpenTok session to
   an archive.
 
-* "/stop" -- The Android client calls this endpoint to stop recording the archive.
+* "/stop" -- The iOS client calls this endpoint to stop recording the archive.
 
-* "/view" -- The Android client load this endpoint in a web browser to display the archive
+* "/view" -- The iOS client load this endpoint in a web browser to display the archive
   recording.
 
 The HTTP POST request to the /session endpoint returns a response that includes the OpenTok
@@ -215,7 +214,7 @@ at in the following sections.
 
 2. On first run, the app asks you for access to the camera:
 
-     Getting Started would like to Access the Camera: Don't Allow / OK
+     LearningOpenTok would like to Access the Camera: Don't Allow / OK
 
    iOS OS requires apps to automatically ask the user to grant camera permission to an app.
 

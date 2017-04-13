@@ -17,16 +17,9 @@ chat session. Additionally, the app uses the OpenTok iOS SDK to implement the fo
 
 The code for this sample is found the following git branches:
 
-* *basics.step-1* -- This branch shows you how to set up your project to use the OpenTok iOS SDK.
-
-* *basics.step-4* -- This branch shows you how to connect to the OpenTok session.
-
-* *basics.step-5* -- This branch shows you how publish a stream to the OpenTok session.
-
-* *basics.step-6* -- This branch shows you how to subscribe to a stream on the OpenTok session.
-
-* *basics.step-7* -- This branch shows you how to add user interface controls to mute the
-  publisher and subscriber audio and to swap the camera used by the publisher.
+* *basics* -- This branch shows you how to set up your project to use the OpenTok iOS SDK.
+  You will also learn how to connect to an OpenTok session, publish a stream to the session,
+  and subscribe to a stream in the OpenTok session.
 
 * *archiving* -- This branch shows you how to record the session.
 
@@ -48,31 +41,46 @@ The code for this sample is found the following git branches:
   camera) as the video source for a published stream.
 
 You will also need to clone the learning-opentok-php repo and run its code on a
-PHP-enabled web server. See the basics.step-2 section for more information.
+PHP-enabled web server. See the Basics section for more information.
 
-## basics.step-1: Starting Point
+## Basics
 
-The step-0 branch includes a basic Xcode project.  Before you can test the application,
-you need to make some settings in Xcode and set up a web service to handle some
-OpenTok-related API calls.
+*Important* -- To view the code for this functionality, switch to the *basic* branch
+of this git repository.
 
-1. Download the [OpenTok iOS SDK] [1].
+The code in this branch shows you how to:
 
-2. Locate the LearningOpenTok.xcodeproj file and open it in Xcode.
+* Set up your project to use the OpenTok iOS SDK.
+* Connect to an OpenTok session
+* Publish a stream to the session
+* Subscribe to a stream in the OpenTok session
 
-3. Include the OpenTok.framework in the list of frameworks used by the app.
-   From the OpenTok iOS SDK, you can drag the OpenTok.framework file into the list of
-   frameworks in the Xcode project explorer for the app.
+### Starting point
 
-4. Copy the SampleConfig.h file to a Config.h file.
+Before you can test the application, you need to make some settings in Xcode and set up
+a web service to handle some OpenTok-related API calls.
 
-   Copy the contents of the SampleConfig.h file to the clipboard. Then select
-   File > New > File (Command-N). In the dialog that is displayed, select
-   Header File, click Next, and save the file as Config.h.
+This project uses CocoaPods to load the OpenTok SDK:
+
+1. Install CocoaPods as described in [CocoaPods Getting
+  Started](https://guides.cocoapods.org/using/getting-started.html#getting-started).
+
+2. In Terminal, `cd` to your project directory and enter the following:
+
+  `pod install`
+
+3. Open the LearningOpenTok.xcworkspace file in XCode.
+
+You will notice the project is missing a header file -- Config.h. To fix this,
+copy the SampleConfig.h file to a Config.h file.
+
+* Copy the contents of the SampleConfig.h file to the clipboard. Then select
+  File > New > File (Command-N). In the dialog that is displayed, select
+  Header File, click Next, and save the file as Config.h.
 
   We will set values for the constants defined in this file in a later step.
 
-## basics.step-2 (server-side): Creating a session and defining archive REST API calls
+### Creating a session and defining archive REST API calls
 
 Before you can test the application, you need to set up a web service to handle some
 OpenTok-related API calls. The web service securely creates an OpenTok session.
@@ -98,11 +106,8 @@ Download the repo and run its code on a PHP-enabled web server. You can also dep
 run the code on Heroku (so you don't have to set up your own PHP server). See the readme
 file in the learning-opentok-php repo for instructions.
 
-
-## basics.step-3 (server-side): Generating a token (server side)
-
 The web service also creates a token that the client uses to connect to the OpenTok session.
-The HTTP GET request to the /service endpoint returns a response that includes the OpenTok
+The HTTP GET request to the /session endpoint returns a response that includes the OpenTok
 session ID and token.
 
 You will want to authenticate each user (using your own server-side authentication techniques)
@@ -111,14 +116,11 @@ use tokens, causing streaming minutes to be charged to your OpenTok developer ac
 it is a best practice to use an HTTPS URL for the web service that returns an OpenTok token,
 so that it cannot be intercepted and misused.
 
+### Connecting to the session
 
-## basics.step-4: Connecting to the session
+First, set the app to use the web service described in the previous section:
 
-The code for this section is added in the basics.step-4 branch of the repo.
-
-First, set the app to use the web service described in the previous two sections:
-
-* In Xcode, open the Config.h file (see basics.step-1). Add the base URL,
+* In Xcode, open the Config.h file (see "Starting Point"). Add the base URL,
   (such as `@"http://example.com"`) in this line:
 
       define SAMPLE_SERVER_BASE_URL @"https://YOUR-SERVER-URL"
@@ -208,7 +210,7 @@ messages. These messages are sent when other clients connect to the session, whe
 audio-video streams to the session, and upon other session-related events, which we will look
 at in the following sections.
 
-## basics.step-5: Publishing an audio video stream to the session
+### Publishing an audio video stream to the session
 
 1. In Xcode, launch the app in a connected iOS device or in the iOS simulator.
 
@@ -226,7 +228,7 @@ at in the following sections.
    session and publish an audio-video stream from a web browser:
 
    * Edit the test.html file and set the `sessionCredentialsUrl` variable to match the
-     `ksessionCredentialsUrl` property used in the iOS app. Or -- if you are using hard-coded
+     `SAMPLE_SERVER_BASE_URL` property used in the iOS app. Or -- if you are using hard-coded
      session ID, token, and API key settings -- set the `apiKey`,`sessionId`, and `token` variables.
 
    * Add the test.html file to a web server. (You cannot run WebRTC videos in web pages loaded
@@ -314,7 +316,7 @@ superview:
         _publisher = nil;
     }
 
-## basics.step-6: Subscribing to another client's audio-video stream
+### Subscribing to another client's audio-video stream
 
 The [OTSessionDelegate session:streamCreated:] message is sent when a new stream is created in
 the session. The app implements this delegate method with the following:
@@ -333,7 +335,8 @@ the session. The app implements this delegate method with the following:
 The method is passed an OTStream object (defined by the OpenTok iOS SDK), representing the stream
 that another client is publishing. Although this app assumes that only one other client is
 connecting to the session and publishing, the method checks to see if the app is already
-subscribing to a stream (if the `_subscriber` property is set). If not, the session calls `[self doSubscribe:stream]`, passing in the OTStream object (for the new stream):
+subscribing to a stream (if the `_subscriber` property is set). If not, the session calls
+`[self doSubscribe:stream]`, passing in the OTStream object (for the new stream):
 
     - (void)doSubscribe:(OTStream*)stream
     {
@@ -356,7 +359,8 @@ It then calls `[OTSession subscribe:error:]` to have the app to subscribe to the
 
 When the app starts receiving the subscribed stream, the
 `[OTDSubscriberDelegate subscriberDidConnectToStream:]` message is sent. The implementation of the
-delegate method adds view of the subscriber stream (defined by the `view` property of the OTSubscriber object) as a subview of the `_subscriberView` UIView object, defined in the main
+delegate method adds view of the subscriber stream (defined by the `view` property of the
+OTSubscriber object) as a subview of the `_subscriberView` UIView object, defined in the main
 storyboard:
 
     - (void)subscriberDidConnectToStream:(OTSubscriberKit*)subscriber
@@ -395,14 +399,10 @@ superview:
         _subscriber = nil;
     }
 
-## basics.step-7: Adding user interface controls
-
-The code for this section is in the basics.step-7 branch.
+### Adding user interface controls
 
 This code adds buttons to mute the publisher and subscriber audio and to toggle the
 publisher camera.
-
-### Muting the publisher and subscriber
 
 When the user clicks the toggle publisher audio button, the `[self togglePublisherMic]`
 method is called:
@@ -439,9 +439,7 @@ clicks the toggle audio button for the Subscriber, the following method is calle
         [_subscriberAudioBtn setImage:buttonImage forState:UIControlStateNormal];
     }
 
-### Changing the camera used by the publisher
-
-When the user clicks the toggle camera button, the `[self swapCamra]` method is called:
+When the user clicks the toggle camera button, the `[self swapCamera]` method is called:
 
     -(void)swapCamera
     {
@@ -452,11 +450,7 @@ When the user clicks the toggle camera button, the `[self swapCamra]` method is 
         }
     }
 
-Setting the `cameraPosition` property of the OTPublisher object sets the camera used by
-the publisher. The `AVCaptureDevicePositionFront` and `AVCaptureDevicePositionBack`
-constants are defined in the [AVCaptureDevice] [6] class.
-
-## archiving.step-1: Recording the session to an archive
+## Recording an OpenTok session to an archive
 
 *Important* -- To view the code for this functionality, switch to the *archiving* branch
 of this git repository.
@@ -530,7 +524,7 @@ displayed. It also changes the archiving control button text to change to "View 
 When the user clicks this button, the `[self loadArchivePlaybackInBrowser:]` method
 opens a web page (in Safari) that displays the archive recording.
 
-## signaling.step-1: Using the signaling API to implement text chat
+## Using the signaling API to implement text chat
 
 *Important* -- To view the code for this functionality, switch to the *signaling* branch
 of this git repository.
@@ -598,9 +592,9 @@ This app uses the OpenTok signaling API to implement text chat. However, you can
 signaling API to send messages to other clients (individually or collectively) connected to
 the session.
 
-# Basic Audio Driver (audio-driver branch)
+## Basic Audio Driver
 
-To see the code for this sample, switch to the audio-driver branch. This branch shows you
+To see the code for this sample, switch to the *audio-driver* branch. This branch shows you
 how to implement a custom audio driver.
 
 The OpenTok iOS SDK lets you set up a custom audio driver for publishers and subscribers. You can
@@ -611,7 +605,7 @@ This sample application uses the custom audio driver to publish white noise (a r
 to its audio stream. It also uses the custom audio driver to capture the audio from subscribed
 streams and save it to a file.
 
-## Setting up the audio device and the audio bus
+### Setting up the audio device and the audio bus
 
 In using a custom audio driver, you define a custom audio driver and an audio bus to be
 used by the app.
@@ -688,7 +682,7 @@ method:
         return self.otAudioFormat;
     }
 
-## Rendering audio from subscribed streams
+### Rendering audio from subscribed streams
 
 The `[OTAudioDevice startRendering:]` method is called when the audio device should start rendering
 (playing back) audio from subscribed streams. The OTKBasicAudioDevice implementation of this method calls the `[self consumeSampleCapture]` method after 0.1 seconds:
@@ -737,7 +731,7 @@ This example is intentionally simple for instructional purposes -- it simply wri
 to a file. In a more practical use of a custom audio driver, you could use the custom audio driver
 to play back audio to a Bluetooth device or to process audio before playing it back.
 
-## Capturing audio to be used by a publisher
+### Capturing audio to be used by a publisher
 
 The `[OTAudioDevice startCapture:]` method is called when the audio device should start capturing
 audio to be published. The OTKBasicAudioDevice implementation of this method calls the `[self produceSampleCapture]` method after 0.1 seconds:
@@ -783,16 +777,16 @@ Then if a capture is still in progress (if the app is publishing), the method ca
         }
     }
 
-## Other notes on the app
+### Other notes on the audio driver sample app
 
 The OTAudioDevice protocol includes other required methods, which are implemented by
 the OTKBasicAudioDevice class. However, this sample does not do anything interesting in
 these methods, so they are not included in this discussion.
 
 
-# Basic Video Renderer (video-renderer-basic branch)
+## Basic Video Renderer
 
-To see the code for this sample, switch to the video-renderer-basic branch. This branch shows you
+To see the code for this sample, switch to the *video-renderer-basic* branch. This branch shows you
 how to make minor modifications to the video renderer used by an OTPublisher object. You can also
 use the same techniques to modify the video renderer used by an OTSubscriber object (though this
 example only illustrates a custom renderer for a publisher).
@@ -897,9 +891,9 @@ render the image view:
         });
     }
 
-# Basic Video Capturer (video-capturer-basic branch)
+## Basic Video Capturer
 
-To see the code for this sample, switch to the video-capturer-basic branch. This branch shows you
+To see the code for this sample, switch to the *video-capturer-basic* branch. This branch shows you
 how to make minor modifications to the video capturer used by the OTPublisher class.
 
 In this example, the app uses a custom video capturer to publish random pixels (white noise).
@@ -999,9 +993,9 @@ OTVideoCaptureConsumer used by this video capturer (described above). This cause
 to send the frame of data to the video stream in the session.
 
 
-# Camera video capturer (video-capturer-camera branch)
+## Camera video capturer
 
-To see the code for this sample, switch to the video-capturer-camera branch. This branch shows you
+To see the code for this sample, switch to the *video-capturer-camera* branch. This branch shows you
 how to use a custom video capturer using the device camera as the video source.
 
 Before studying this sample, see the video-capturer-basic sample.
@@ -1015,7 +1009,7 @@ to obtain the video frame.
 Note that because this sample needs to access the device's camera, you must test it on an iOS
 device. You cannot test it in the iOS simulator.
 
-## Initializing and configuring the video capturer
+### Initializing and configuring the video capturer
 
 The `[OTKBasicVideoCapturer initWithPreset: andDesiredFrameRate:]` method is an initializer for
 the OTKBasicVideoCapturer class. It calls the `sizeFromAVCapturePreset` method to set the resolution of the image. The image size and frame rate are also set here. A separate queue is created for capturing images, so as not to affect the UI queue.
@@ -1132,7 +1126,7 @@ The `[[OTVideoCapture currentDeviceOrientation]` method queries the orientation 
 AVFoundation framework and returns its equivalent defined by the OTVideoOrientation enum in
 OpenTok iOS SDK.
 
-## Capturing frames for the publisher's video
+### Capturing frames for the publisher's video
 
 The implementation of the `[OTVideoCapture startCapture]` method is called when the
 publisher starts capturing video to publish. It calls the `[AVCaptureSession startRunning]` method
@@ -1223,16 +1217,16 @@ to the session without interruption:
         NSLog(@"Frame dropped");
     }
 
-## Other notes on the app
+### Other notes on the camera video capturer sample app
 
 The OTVideoCapture protocol includes other required methods, which are implemented by
 the OTKBasicVideoCapturer class. However, this sample does not do anything interesting in
 these methods, so they are not included in this discussion.
 
 
-# Screen sharing (screen-sharing branch)
+## Screen sharing
 
-To see the code for this sample, switch to the screen-sharing branch. This branch shows you
+To see the code for this sample, switch to the *screen-sharing* branch. This branch shows you
 how to capture the screen (a UIView) using a custom video capturer.
 
 Before studying this sample, see the video-capturer-basic sample.
@@ -1278,7 +1272,7 @@ screen captures:
         return 0;
     }
 
-The produceFrame method:
+The `produceFrame` method:
 
 * Defines the frame for captured images.
 
@@ -1383,13 +1377,13 @@ The `screenshot` method takes a screenshot and returns an image. This method is 
     }
 
 
-# Other resources
+## Other resources
 
 See the following:
 
 * [API reference] [7] -- Provides details on the OpenTok iOS SDK API
 * [Tutorials] [8] -- Includes conceptual information and code samples for all OpenTok features
-* [Sample code] [9] (Also included in the OpenTok iOS SDK download) -- Includes sample apps
+* [Sample code] [9] -- Includes sample apps
   that show more features of the OpenTok iOS SDK
 
 [1]: https://tokbox.com/opentok/libraries/client/ios/

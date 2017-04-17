@@ -101,8 +101,8 @@
 
 - (void)doPublish
 {
-    _publisher = [[OTPublisher alloc]
-                  initWithDelegate:self];
+    OTPublisherSettings *settings = [[OTPublisherSettings alloc] init];
+    _publisher = [[OTPublisher alloc] initWithDelegate:self settings:settings];
     
     OTError *error = nil;
     [_session publish:_publisher error:&error];
@@ -134,9 +134,9 @@
     _publisher.publishAudio = !_publisher.publishAudio;
     UIImage *buttonImage;
     if (_publisher.publishAudio) {
-        buttonImage = [UIImage imageNamed: @"mic-24.png"];
+        buttonImage = [UIImage imageNamed: @"mic"];
     } else {
-        buttonImage = [UIImage imageNamed: @"mic_muted-24.png"];
+        buttonImage = [UIImage imageNamed: @"muted_mic"];
     }
     [_publisherAudioBtn setImage:buttonImage forState:UIControlStateNormal];
 }
@@ -146,9 +146,9 @@
     _subscriber.subscribeToAudio = !_subscriber.subscribeToAudio;
     UIImage *buttonImage;
     if (_subscriber.subscribeToAudio) {
-        buttonImage = [UIImage imageNamed: @"Subscriber-Speaker-35.png"];
+        buttonImage = [UIImage imageNamed: @"audio"];
     } else {
-        buttonImage = [UIImage imageNamed: @"Subscriber-Speaker-Mute-35.png"];
+        buttonImage = [UIImage imageNamed: @"noAudio"];
     }
     [_subscriberAudioBtn setImage:buttonImage forState:UIControlStateNormal];
 }
